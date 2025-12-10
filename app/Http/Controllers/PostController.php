@@ -28,10 +28,11 @@ class PostController extends Controller
        ]);
 
        $data = $request->only(['title', 'author', 'article']);
-       $data['user_id'] = $request->user()->id;
 
        if ($request->hasFile('image')) {
-           $imagePath = $request->file('image')->store('images', 'public');
+           $image = $request->file('image');
+           $imageName = time().'.'.$image->getClientOriginalName();
+           $imagePath = $image->storeAs('posts', $imageName, 'public');
            $data['image'] = $imagePath;
        }
        $post = Post::create($data);
@@ -76,8 +77,10 @@ class PostController extends Controller
                 Storage::disk('public')->delete($post->image);
            }
 
-            $imagePath = $request->file('image')->store('images', 'public');
-            $data['image'] = $imagePath;  
+            $image = $request->file('image');
+            $imageName = time().'.'.$image->getClientOriginalName();
+            $imagePath = $image->storeAs('posts', $imageName, 'public');
+            $data['image'] = $imagePath;
         }
 
         $post->update($data);

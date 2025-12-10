@@ -8,6 +8,9 @@ use App\Http\Controllers\AuthController;
 // Route Autentikasi
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::get('/login', function() {
+    return response()->json(['message' => 'Unauthorized'], 401);
+})->name('login');
 
 // Route yang memerlukan autentikasi
 Route::middleware('auth:sanctum')->group(function () {
